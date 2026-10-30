@@ -55,16 +55,24 @@
 
     button:hover { background: #1056b2; }
 
-    .destination {
-      margin-top: 18px;
-      font-size: 12px;
-      overflow-wrap: anywhere;
+    footer {
+      margin-top: 16px;
+      color: #647184;
+      font-size: 13px;
     }
 
-    footer {
-      margin-top: 28px;
+    .notice {
+      display: block;
+      margin-top: 8px;
       color: #8a96a5;
-      font-size: 12px;
+      font-size: 11px;
+    }
+
+    .destination {
+      margin-top: 12px;
+      font-size: 11px;
+      overflow-wrap: anywhere;
+      color: #8a96a5;
     }
   </style>
 </head>
@@ -73,8 +81,13 @@
     <h1>Client Document Center</h1>
     <p>Select Continue to visit the next page.</p>
     <button id="continueButton" disabled>Loading...</button>
+
+    <footer>
+      Secure access folder
+      <small class="notice">Continue opens an external document portal.</small>
+    </footer>
+
     <div class="destination" id="destination"></div>
-    <footer>Secure access folder</footer>
   </main>
 
   <script>
@@ -93,7 +106,7 @@
           throw new Error("Destination must use HTTPS");
         }
 
-        destinationText.textContent = "Destination: " + url.hostname;
+        destinationText.textContent = "External destination: " + url.hostname;
         button.textContent = "Continue";
         button.disabled = false;
 
