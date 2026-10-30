@@ -1,1 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Document Center</title>
+  <style>
+    * { box-sizing: border-box; }
 
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #f3f5f8;
+      font-family: Arial, sans-serif;
+      color: #263445;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 440px;
+      padding: 42px 32px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid #e5e9ef;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(25, 45, 70, .08);
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: 26px;
+    }
+
+    p {
+      color: #647184;
+      line-height: 1.6;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 15px;
+      border: 0;
+      border-radius: 7px;
+      background: #1769d2;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover { background: #1056b2; }
+
+    .destination {
+      margin-top: 18px;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      margin-top: 28px;
+      color: #8a96a5;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Client Document Center</h1>
+    <p>Select Continue to visit the next page.</p>
+    <button id="continueButton" disabled>Loading...</button>
+    <div class="destination" id="destination"></div>
+    <footer>Secure access folder</footer>
+  </main>
+
+  <script>
+    async function loadDestination() {
+      const button = document.getElementById("continueButton");
+      const destinationText = document.getElementById("destination");
+
+      try {
+        const response = await fetch("./config.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("Configuration unavailable");
+
+        const config = await response.json();
+        const url = new URL(config.destinationUrl);
+
+        if (url.protocol !== "https:") {
+          throw new Error("Destination must use HTTPS");
+        }
+
+        destinationText.textContent = "Destination: " + url.hostname;
+        button.textContent = "Continue";
+        button.disabled = false;
+
+        button.addEventListener("click", () => {
+          window.open(url.href, "_blank", "noopener,noreferrer");
+        });
+      } catch (error) {
+        button.textContent = "Temporarily unavailable";
+        destinationText.textContent = "Please try again later.";
+        console.error(error);
+      }
+    }
+
+    loadDestination();
+  </script>
+</body>
+</html>
